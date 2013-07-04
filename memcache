@@ -50,6 +50,6 @@ limit_maxbytes	分配给memcache的内存大小（字节）
 threads	当前线程数
 
 4、Memcache 启动tips
-a:监听内网地址
-b：修改默认端口号
-c:设置最大连接数，最大内存占用数
+a:监听内网地址   -l
+b：修改默认端口号 -p
+c:设置最大连接数，最大内存占用数 -m

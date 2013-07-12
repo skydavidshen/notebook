@@ -1,0 +1,17 @@
+1: scp 远程传文件 ssh
+scp davidshen@192.168.190.114:/home/davidsheninx-1.5.2.tar.gz nginx-1.5.2.tar.gz
+
+2：安装c编译器
+yum install gcc gcc-c++ kernel-devel
+
+3：yum install pcre-devel
+
+4：yum install zilb-devel
+
+5：make & make install
+
+6:切到/user/local/nginx/sbin/ 运行 ./nginx
+
+7:ps -ef | grep nginx 看看服务是否起来
+
+8:telnet 192.168.190.110 80

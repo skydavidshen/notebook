@@ -1,0 +1,4 @@
+
+在  /etc/sysconfig/network-scripts  目录下新件了 文件  route-eth0 添加内容  via 192.168.1.1
+重启网络：/sbinrvice network restart  然后ping www.lawtime.cn    OK! 能上网了。
+问题原因:系统缺少路由 配置

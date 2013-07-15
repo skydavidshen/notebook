@@ -1,0 +1,9 @@
+1:匹配一个字符串中，某类标签里面字符串中特定的几个字符并且替换成其他字符。
+
+$string = '<p><a _soj="ifx_15" href="http://shanghai.fp01.dev.jinpu.com/xinpan/xiezilou/220142" target="_blank"><img style="vertical-align: middle;margin: 0;background-color: #FFFFFF;border: 1px solid #CCCCCC;padding: 4px;" src="http://pic1.jinpu.com/display/jinpu/13bff44ef1e99dd733a5dc043c290bf0/140x105c.jpg" border="0" height="105" width="140"/>dddddddddddddddddddddddddddd</a>dddddddddd</p>';
+$string .= '<p><a _soj="ifx_15" href="http://shanghai.fp12.dev.jinpu.com/xinpan/xiezilou/220142" target="_blank"><img style="vertical-align: middle;margin: 0;background-color: #FFFFFF;border: 1px solid #CCCCCC;padding: 4px;" src="http://pic1.jinpu.com/display/jinpu/13bff44ef1e99dd733a5dc043c290bf0/140x105c.jpg" border="0" height="105" width="140"/>dddddddddddddddddddddddddddd</a>ccccccccccccc</p>';
+
+$pattern = "/href=\"(.+?)jinpu.com(.+?)\"/";
+$replacement = 'href="$1baidu.com$2"';
+$rs= preg_replace($pattern, $replacement, $string);
+echo $rs;

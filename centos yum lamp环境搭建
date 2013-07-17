@@ -1,3 +1,8 @@
+
+安装c编译器
+yum install gcc gcc-c++ kernel-devel
+
+
 一、安装 MySQL
 
 首先来进行 MySQL 的安装。

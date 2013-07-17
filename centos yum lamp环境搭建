@@ -1,0 +1,36 @@
+一、安装 MySQL
+
+首先来进行 MySQL 的安装。
+yum install mysql mysql-server
+   
+MySQL 能够随系统自动启动：
+chkconfig --levels 235 mysqld on
+/etc/init.d/mysqld start
+   
+设置 MySQL 数据 root 账户的密码：
+mysql_secure_installation 
+如果有提示，直接回车。
+   
+二、安装 Apache 组件
+yum install httpd
+chkconfig --levels 235 httpd on
+/etc/init.d/httpd start
+
+注意：在 CentOS 中 Apache 的默认根目录是 /var/www/html，配置文件 /etc/httpd/conf/httpd.conf。
+其他配置存储在 /etc/httpd/conf.d/ 目录。
+
+三、安装 PHP
+yum install php
+/etc/init.d/httpd restart
+
+四、测试 PHP 相关信息
+vi /var/www/html/info.php
+<?php
+phpinfo();
+?>
+
+五、将 PHP 模块和 MySQL 模块关联起来
+yum search php
+yum install php-mysql php-gd php-imap php-ldap php-odbc php-pear php-xml php-xmlrpc
+/etc/init.d/httpd restart
+

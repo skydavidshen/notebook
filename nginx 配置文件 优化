@@ -1,19 +1,25 @@
 1 nginx.conf 配置文件:
 
-user    www www;
-worker_processes 4;
+#运行用户
+user www-data;    
+#启动进程,通常设置成和cpu的数量相等
+worker_processes  1;
 
 # [ debug | info | notice | warn | error | crit ]
+#全局错误日志及PID文件
 error_log    /usr/local/webserver/nginx/logs/nginx_error.log    crit;
 pid                /usr/local/webserver/nginx/nginx.pid;
 #Specifies the value for maximum file descriptors that can be opened by this process.
 worker_rlimit_nofile 51200;
+
+#工作模式及连接数上限
 events
 {
          use epoll;
          worker_connections 51200;
 }
 
+#设定http服务器，利用它的反向代理功能提供负载均衡支持
 http
 {
          include             mime.types;

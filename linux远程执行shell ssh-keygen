@@ -1,0 +1,23 @@
+192.168.168.45 执行 192.168.168.13 上的shell命令
+
+原理是  ssh-keygen 和 ssh
+
+
+1.生成45的密钥,在45上执行
+Shell代码  
+#ssh-keygen -t rsa  
+会在用户的.ssh目录下(/root/.ssh)生成id_dsa.pub 授权加密文件
+2.13授权,把在45上生成id_dsa.pub 复制到13  的/root/.ssh下执行
+Shell代码  
+#cat id_dsa.pub >> ~/.ssh/authorized_keys  
+ 
+3.设置13上文件和目录的权限(保证.ssh和authorized_keys 的权限是600)
+设置authorized_keys
+Shell代码  
+#chmod 600 authorized_keys  
+设置.ssh目录
+Shell代码  
+#chmod 600 -R .ssh  
+4. 执行远程命令
+Shell代码  
+ssh root@192.168.168.13 "sh /tmp/test.sh"  

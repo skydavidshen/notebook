@@ -50,6 +50,10 @@ $ cat /tmp/id_rsa.john.pub >> ~/.ssh/authorized_keys
 $ cat /tmp/id_rsa.josie.pub >> ~/.ssh/authorized_keys
 $ cat /tmp/id_rsa.jessica.pub >> ~/.ssh/authorized_keys
 
+3.设置服务器 目录的权限(保证.ssh和authorized_keys 的权限是600 如果不是root权限就设置为755)
+设置authorized_keysShell代码  #chmod 600 authorized_keys  设置.ssh目录Shell代码  #chmod 600 -R .ssh     
+如果不是 root权限  改成 755
+
 现在可以使用 –bare 选项运行 git init 来设定一个空仓库，这会初始化一个不包含工作目录的仓库。
 
 	

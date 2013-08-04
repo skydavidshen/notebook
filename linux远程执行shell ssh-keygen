@@ -17,7 +17,7 @@ Shell代码
 #chmod 600 authorized_keys  
 设置.ssh目录
 Shell代码  
-#chmod 600 -R .ssh  
+#chmod 600 -R .ssh     如果不是 root权限  改成 755
 4. 执行远程命令
 Shell代码  
 ssh root@192.168.168.13 "sh /tmp/test.sh"  

@@ -1,0 +1,14 @@
+1：依赖
+sudo yum install curl-devel zlib-devel openssl-devel perl cpio expat-devel gettext-devel perl gcc gcc-c++
+
+2:wget http://codemonkey.org.uk/projects/git-snapshots/git/git-latest.tar.gz
+
+3:gunzip git-latest.tar.gz
+
+4:tar zvf git-latest.tar 
+
+5:autoconf  (生成configure配置文件)
+
+6:make 
+
+7:sudo make install

@@ -2,7 +2,9 @@
 1. 生成 SSH 公钥
 
 每个需要使用git服务器的工程师，自己需要生成一个ssh公钥
-进入自己的~/.ssh目录，看有没有用 文件名 和 文件名.pub 来命名的一对文件，这个 文件名 通常是 id_dsa 或者 id_rsa。 .pub 文件是公钥，另一个文件是密钥。假如没有这些文件（或者干脆连 .ssh 目录都没有），你可以用 ssh-keygen 的程序来建立它们，该程序在 Linux/Mac 系统由 SSH 包提供， 在 Windows 上则包含在 MSysGit 包里:
+进入自己的~/.ssh目录，看有没有用 文件名 和 文件名.pub 来命名的一对文件，这个 文件名 通常是 id_dsa 或者 id_rsa。
+.pub 文件是公钥，另一个文件是密钥。假如没有这些文件（或者干脆连 .ssh 目录都没有），
+你可以用 ssh-keygen 的程序来建立它们，该程序在 Linux/Mac 系统由 SSH 包提供， 在 Windows 上则包含在 MSysGit 包里:
 
 
 
@@ -18,7 +20,8 @@ The key fingerprint is:
 
 它先要求你确认保存公钥的位置（.ssh/id_rsa），然后它会让你重复一个密码两次，如果不想在使用公钥的时候输入密码，可以留空。
 
-现在，所有做过这一步的用户都得把它们的公钥给你或者 Git 服务器的管理者（假设 SSH 服务被设定为使用公钥机制）。他们只需要复制 .pub 文件的内容然后 e-email 之。公钥的样子大致如下：
+现在，所有做过这一步的用户都得把它们的公钥给你或者 Git 服务器的管理者（假设 SSH 服务被设定为使用公钥机制）。
+他们只需要复制 .pub 文件的内容然后 e-email 之。公钥的样子大致如下：
 
 
 $ cat ~/.ssh/id_rsa.pub 
@@ -39,7 +42,8 @@ $ su git
 $ cd
 $ mkdir .ssh
 
-接下来，把开发者的 SSH 公钥添加到这个用户的 authorized_keys 文件中。假设你通过 e-mail 收到了几个公钥并存到了临时文件里。只要把它们加入 authorized_keys 文件
+接下来，把开发者的 SSH 公钥添加到这个用户的 authorized_keys 文件中。假设你通过 e-mail 收到了几个公钥并存到了临时文件里。
+只要把它们加入 authorized_keys 文件
 
 	
 $ cat /tmp/id_rsa.john.pub >> ~/.ssh/authorized_keys
@@ -54,7 +58,9 @@ $ mkdir project.git
 $ cd project.git
 $ git --bare init
 
-这时，开发人员就可以把它加为远程仓库，推送一个分支，从而把第一个版本的工程上传到仓库里了。值得注意的是，每次添加一个新项目都需要通过 shell 登入主机并创建一个纯仓库。我们不妨以 gitserver 作为 git 用户和仓库所在的主机名。如果你在网络内部运行该主机，并且在 DNS 中设定 gitserver 指向该主机，那么以下这些命令都是可用的：
+这时，开发人员就可以把它加为远程仓库，推送一个分支，从而把第一个版本的工程上传到仓库里了。值得注意的是，
+每次添加一个新项目都需要通过 shell 登入主机并创建一个纯仓库。我们不妨以 gitserver 作为 git 用户和仓库所在的主机名。
+如果你在网络内部运行该主机，并且在 DNS 中设定 gitserver 指向该主机，那么以下这些命令都是可用的：
 
 
 # 在一个工程师的电脑上
@@ -75,7 +81,9 @@ $ git push origin master
 
 用这个方法可以很快捷的为少数几个开发者架设一个可读写的 Git 服务。
 
-作为一个额外的防范措施，你可以用 Git 自带的 git-shell 简单工具来把 git 用户的活动限制在仅与 Git 相关。把它设为 git 用户登入的 shell，那么该用户就不能拥有主机正常的 shell 访问权。为了实现这一点，需要指明用户的登入shell 是 git-shell ，而不是 bash 或者 csh。你可能得编辑 /etc/passwd 文件
+作为一个额外的防范措施，你可以用 Git 自带的 git-shell 简单工具来把 git 用户的活动限制在仅与 Git 相关。
+把它设为 git 用户登入的 shell，那么该用户就不能拥有主机正常的 shell 访问权。为了实现这一点，
+需要指明用户的登入shell 是 git-shell ，而不是 bash 或者 csh。你可能得编辑 /etc/passwd 文件
 
 
 $ sudo vim /etc/passwd

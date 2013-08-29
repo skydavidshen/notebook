@@ -29,7 +29,8 @@ Field
 
 Field 对象是用来描述一个文档的某个属性的，比如一封电子邮件的标题和内容可以用两个 Field 对象分别描述。
 
-Field有两个属性可选：存储和索引。通过存储属性你可以控制是否对这个Field进行存储；通过索引属性你可以控制是否对该Field进行索引。这看起来似乎有些废话，事实上对这两个属性的正确组合很重要。
+Field有两个属性可选：存储和索引。通过存储属性你可以控制是否对这个Field进行存储；通过索引属性你可以控制是否对该Field进行
+索引。这看起来似乎有些废话，事实上对这两个属性的正确组合很重要。
 Field.Index             Field.Store       说明
 TOKENIZED(分词)   YES                   被分词索引且存储
 TOKENIZED             NO                   被分词索引但不存储
@@ -37,7 +38,8 @@ NO                         YES                   这是不能被搜索的，它�
 UN_TOKENIZED     YES/NO             不被分词，它作为一个整体被搜索,搜一部分是搜不出来的
 NO                         NO                   没有这种用法
 
-如果要对某Field进行查找，那么一定要把Field.Index设置为TOKENIZED或UN_TOKENIZED。TOKENIZED会对Field的内容进行分词；而UN_TOKENIZED不会，只有全词匹配，该Field才会被选中。
+如果要对某Field进行查找，那么一定要把Field.Index设置为TOKENIZED或UN_TOKENIZED。TOKENIZED会对Field的内容进行分词；而
+UN_TOKENIZED不会，只有全词匹配，该Field才会被选中。
 如果Field.Store是No，那么就无法在搜索结果中从索引数据直接提取该域的值，会使null。
 
 

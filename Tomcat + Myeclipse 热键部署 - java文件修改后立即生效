@@ -1,3 +1,40 @@
+
+
+
+开发环境：myeclipse 8.5、 tomcat5.0(解压版)、jdk1.5(自安装)
+
+部署方式：通过myeclipse自动部署项目到tomcat的webapp文件夹下，不是通过修改tomcat的配置文件。
+
+问题描述：修改.jsp、java等文件后，无法在浏览器中看到修改后的效果，需要重启tomcat，才可以看到。
+
+原因：解压后的原context.xml文件中的context节点默认有两个属性：antiResourceLocking="true" antiJARLocking="true"，即Tomcat的资源锁定和Jar包锁定策略。 当antiResourceLocking="true"时，tomcat每次启动时都会在temp目录下生成相应工程的临时文件，并把这些文件锁定，所以即使修改文件后，webapps文件夹下的修改时间会更新，但是temp文件夹下的修改时间是启动tomcate之前的修改时间。而用户在浏览器访问的资源却是temp下的，不是webapps下的。所以最终导致用户修改的效果无法在浏览器中看到。当antiResourceLocking=“false”后，temp目录下就不会生成临时文件了，这是用户访问的就是webapps下的资源了。
+
+解决方法：查看tomcate/conf/context.xml中的 context节点。如果有antiResourceLocking这个属性，应该把他的值设为false。通过设置reloadable="true" 属性，该属性主要用于自动部署java文件的修改。
+
+修改java文件后，点击保存，控制台应该会看到如下信息：
+
+2010-12-27 1:07:11 org.apache.catalina.core.StandardContext reload
+信息: Reloading this Context has started
+
+说明修改的java文件生效了。
+
+问题延伸：
+
+1、修改并保存jsp或java文件，查看myecipse工作空间和tomcat的webapp目录下对应的文件最后修改时间是否为最新。
+
+2、如果工作空间中的.class文件修改时间不能更新，说明myeclipse设置有问题，导致java文件无法自动编译。勾选Project-->build autoMaticaly即可。
+
+3、如果工作空间中对应的.class文件的修改时间是保存的时间，而tomcate中修改时间不变，说明myecipse配置有问题，可能是因为tomcate的运行模式不是debug mode
+
+4、如果两者相应位置的.class的修改时间都是刚保存的时间，说明myeclipse设置没有问题，而是tomcat配置文件有问题。查看tomcate/conf/context.xml中的 context节点。如果有antiResourceLocking这个属性，应该把他的值设为false。
+
+5、如果antiResourceLocking=“true”,说明tomcat锁定了资源文件，导致不能更新资源。
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+
+
 用myeclipse对修改过的程序保存后，为什么不能实时反映到浏览器上，这个问题困扰我了很久，
 
 现在有个办法对此进行修正：

@@ -1,0 +1,22 @@
+用myeclipse对修改过的程序保存后，为什么不能实时反映到浏览器上，这个问题困扰我了很久，
+
+现在有个办法对此进行修正：
+
+现在只要设置一下 context.xml
+
+1.找到 context.xml ,这个文件在 %catalina_home%\conf下
+
+2.打开文件,在 <Context>标记上添加属性: antiJARLocking="true" antiResourceLocking="true"
+3.保存,然后重启
+
+修改后的context.xml如下：
+
+<Context antiJARLocking="true" antiResourceLocking="true">
+
+    <!-- Default set of monitored resources -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+  </Context>
+
+红色部分就为增加的内容
+
+在myeclipse中部署应用，然后对修改后的内容进行“redeploy”操作就行了 

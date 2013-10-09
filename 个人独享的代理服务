@@ -1,0 +1,60 @@
+
+
+link ： http://t.kban.info/2010/09/google-app-enginegappproxy.html
+
+
+
+ 如果说使用SSH配合Firefox翻墙这种翻墙称为翻墙利器，那么在Google app engine上搭建GAppProxy个人代理服务器来翻墙可以称之为“翻墙神器”！
+一：想要使用此种办法搭建个人独享的代理服务请先看完以下文字：
+
+    此种翻墙教程网上有很多教程，大多出自两三人之手，其余为转载，新手很容易遇到问题，遇到问题了提问也没用，他们没法解答。
+    高手写的教程容易忽略细节，对他们来说习以为常，但是对于我们这些新手却很难，一个小小的步骤省略了我们就打住了，后面的事情做不下去了。哲哲花了7个小时搭建成功了，要是让我再做一遍10分钟足以。
+    在Google app engine上搭建GAppProxy个人代理服务器最大的有点是速度快！谷歌的服务器访问全球的网站都很快。使用twitter，Facebook延时 在80到150的样子，和访问百度差不多！做网站的朋友知道国外的服务器在国内使用非常快的延时也在200到300。
+
+在Google app engine上搭建GAppProxy个人代理服务器目前有很多bug，比如登陆问题，下载限制为1M，以及给别的Wordpress博客的回复有的不成功，还有就是Youtube的视频看不了，以及其他的一些问题。（目前这个问题已经解决，稍后本站将给出“改良版”和“完美版”两个教程）
+二：认识下Google app engine和GAppProxy这两个新玩意：
+
+    你可以把Google app engine当作谷歌提供的免费服务器，不过它不是PHP的也不是ASP的，而是别的语言，理解到这里就可以了，详细的内容可以到http://code.google.com/intl/zh-CN/appengine/这里查看。
+    GAppProxy，你可以把它当作翻墙软件，包括两部分，一部分在自己电脑上叫做客户端，另一部分它运行在 Google App Engine(GAE) 上，为 GAppProxy 的客户端提供服务。这两部分合起来构成完整的翻墙软件。
+
+三：安装GAppProxy代理服务器详细的步骤：用一句话概括是把GAppProxy的属于服务器端的文件上传到Google App Engine(GAE)，运行GAppProxy客户端链接到服务器，设置浏览器的代理，ok！开始自由冲浪！（我详细讲步骤，中间有些叙述错误望包含，我非计算机专业，资历尚浅）
+
+    用 Google 账户登录 Google App Engine 后，点击 Create an Application 创建一个应用程序。
+    下载并安装 Python 和 Google App Engine SKD并安装。
+    修改一个文件，用特殊的办法把服务器端文件上传到Google App Engine(GAE)。
+    修改浏览器代理，运行客户端，开始自由冲浪！
+
+================================详细步骤见下面================================
+在 写下详细步骤之前首先感谢以为署名“wallproxy”的这位朋友，经这位朋友指点哲哲对Google app engine有了更多的认识了!目前先写下这个搭建个人代理服务器的基础教程，稍后将按照“wallproxy”这位朋友的指导陆续写下改良版和完美版两 个教程，为什么不直接把完美版的搭建教程拿出来呢，因为目前基础版的教程能满足很多朋友的要求了，并且搭建起来相对容易些，希望搭建继续关注，期待下一个详细的教程出炉。
+第一步：用 Google 账户登录 Google App Engine ， 创建一个应用程序。
+点击此处链接到官方注册 Google App Engine: 用 Google 账户 登录 Google App Engine 后，点击Create an Application 创建一个应用程序。
+这一步要输入手机号才能开通，输入手机号的格式是+8613888888888，收到一个验证码后填入即可开通，没有这一步验证无法开通，也不要对谷歌有顾虑，他不会给你打骚扰……
+然后会进入创建程序的详细信息界面，这里需要填写两个内容，第一个填写的是ID，形式上相当于二级域名的前面那部分，最后得到的是yourname.appspot.com这样的域名。填写了点Check Availability验证下看是否被占用。然后填写个应用名称，建议用英文或数字的，这个不重要。然后勾选同意，点击“save”保存。
+到此第一步就完成了，我们已经创建了一个应用了。网页留在那里就先不要管了。
+第二步：下载并安装 Python ，Google App Engine SKD，下载客户端 GappProxy和服务器端fetchServer文件，稍后用。
+点击Python进入官方主页，点击左侧的Download下载最新版的python的windows安装包。很不幸的告诉你，主页可以正常进去，其他的栏目链接也能正常进去，唯独下载页面打不开。挂上我自己的代理就打开了，又想问候谁母亲了！
+点击Google App Engine SDK进入SDK下载也，下载windows平台的msi文件就可以了。
+安 装很简单，请先安装Python，然后安装Google App Engine SDK，Python默认的目录是系统所在盘的根目录下，SDK默认目录为X:\Program Files\Google\google_appengine\，也不要改动，避免不必要的麻烦。
+客户端和服务器端文件的直接下载地址: GappProxy | fetchServer
+如果不能下载，请到点击前往下载页面：
+第三步：修改文件，并上传到刚才创建的谷歌的应用程序服务器。
+把刚才下载到的fetchServer压缩包解压，复制到X:\Program Files\Google\google_appengine\文件夹下面，如果fetchServer文件夹名字太长可以修改下，看下面的截图，不要放错地方咯。
+修改fetchServer文件夹中的app.yaml这个文件夹，把第一行的application后面的字母修改为你刚才申请的ID，就是那个二级域名的前面那部分。注意要用notepad++等专门的代码编辑软件打开，不要用写字板，记事本！
+上传到谷歌的服务器，这和FTP上传不一样，请按照一下步骤操作：
+
+    依次点击“开始”–“运行”–输入“cmd”就打开了命令提示符。
+    输入 cd X:\Program Files\Google\google_appengine\（x修改为你刚才安装的盘符）转到 X:\Program Files\Google\google_appengine 目录。
+    输入以下命令行: appcfg.py update fetchserver，回车，按照要求输入 Google 账户及密码，输入密码时光标不走动，你依次输入完整密码就行，一次不成功就多试几次。
+    上传成功后http://yourname.appspot.com/fetch.py这个地址会有如下显示，如果打不开就是上传的问题，重新上传吧。
+
+
+第四步：修改浏览器设置，解压GappProxy客户端并运行。
+哲哲的电脑安装了四个浏览器，默认的浏览器为Firefox，我修改了IE8的代理后没反应，修改了火狐的代理后立马能用了。问题在哪里没有去寻找，因为我基本不用IE的。
+IE浏览器修改方法：“工具”–“Internet选项”–“连接”–“局域网设置”代理设置为127.0.0.1：8000。
+Firefox代理修改方法：“工具”–“选项”–“高级”–“网络”–“设置”–“手动配置代理”设置为127.0.0.1：8000。
+GAppProxy客户端本身为绿色软件，不需要安装。双击即可解压。解压后运行gui.exe，第二行打勾，填写http://yourname.appspot.com/fetch.py点击“save”保存。然后退出去，重新打开gui.exe。
+最后的说明：点击Statue提示“Proxy is running”还不能上twitter的话，点击Service，提示要不要把GappProxy作为系统服务，随便你了。
+这 个是基础教程，成功后你可以尝试下上twitter和facebook官网的速度，跟打开百度一样，哈哈，这样的速度任何一个公用的代理都达不到吧，毕竟 是谷歌的服务器搭建的代理。登陆问题怎么解决呢？你使用其他的翻墙方式登陆过twitter的话，再使用我们刚搭建好的代理服务器就已经自动登陆到 Twitter了。对于国内的网站登陆问题怎么解决呢？下一个改良版的教程会有详细的说明。搭建过程中遇到问题了就多思考下，多使用谷歌搜索下，也可以在 右上角的“关于”中点击QQ和GTalk的临时会话联系我，当然GTalk加我为好友会更方便。
+最后希望大家推荐此教程给你的朋友们，大家共享自由的互联网，欢迎订阅八亿空间，欢迎关注八亿空间“改良版”和“完美版”的翻墙教程。
+Google App Engine+GAppProxy架设个人翻墙代理服务器详细教程【基础篇】 GAE+GAppProxy+Firefox+AutoProxy个人代理服务器穿墙【改良篇】
+Google App Engine+WallProxy搭建个人代理服务器详细教程【完美版】

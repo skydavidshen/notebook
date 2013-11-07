@@ -1,22 +1,22 @@
 function CreatePerson(name,sex,birthday)  
-	{  
-	  this.name = name;
-	  this.sex = sex;
-	  this.birthday = birthday;
-	}  
-	
-	CreatePerson.prototype ={
-		sayHi:function(){
-			alert("hi , my name is "+this.name);
-		},
-		walk:function(){
-			alert(this.name+" is walking now");
-		}
+{  
+  this.name = name;
+  this.sex = sex;
+  this.birthday = birthday;
+}  
+
+CreatePerson.prototype ={
+	sayHi:function(){
+		alert("hi , my name is "+this.name);
+	},
+	walk:function(){
+		alert(this.name+" is walking now");
 	}
-	
-	//那么我们多创建几个人的话，就可以  
-	var person1 = new CreatePerson('zs','boy','2001-02-03');  
-	var person2 = new CreatePerson('ls','boy','2001-02-04');  
-	person1.sayHi();
-	person1.walk();
-	person2.sayHi(); 
+}
+
+//那么我们多创建几个人的话，就可以  
+var person1 = new CreatePerson('zs','boy','2001-02-03');  
+var person2 = new CreatePerson('ls','boy','2001-02-04');  
+person1.sayHi();
+person1.walk();
+person2.sayHi(); 

@@ -54,6 +54,7 @@ shape.method2();
 
 // 在js中并无继承机制，但可以通过将prototype中保存的变量逐一复制也可实现类似java语言中的继承，如下所示：
 Object.extend = function(destination, source) {
+      // 值得注意的是：Shape类的 param1，param2 这两个属性也被copy到Square类中去了
       for (var property in source){
         destination[property] = source[property];
       }  
@@ -66,6 +67,7 @@ function Square(){
    
 Square.prototype = Object.extend(new Shape(),{method3:function(){alert('square')}});
 
+// 值得注意的是：Shape类的 param1，param2 这两个属性也被copy到Square类中去了
 var square = new Square();
 square.init('square method1','square method2');
 square.method1();

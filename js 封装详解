@@ -1,0 +1,102 @@
+封装是面向对象的重要概念之一。如果一个程序没有封装性，也就谈不上什么面向 对象。但是，JavaScript并不像其他的语言，比如Java，有公有变量和私有变量等；在JavaScript中只有一种作用域：公有作用域。在本 章中，我们将会见识到JavaScript是如何实现封装的特性的。
+
+1. this和公有变量
+
+首先需要理解this关键字。看下面的一段代码，你应该对此感到熟悉：
+
+Js代码
+
+    function Person(name, age) {  
+        this.name = name; // 定义一个公有变量  
+       this.age = age;  
+        this.show = function() { // 定义一个公有函数  
+            alert("name: " + name + "; age: " + age);  
+        }  
+    }  
+    var bill = new Person("Bill", 20);  
+    alert(bill.name);  
+    bill.show(); 
+
+这里的this关键字是必不可少的。前面只是让大家记住，那么为什么要这样 呢？想想JavaScript的对象，JavaScript的对象类似于散列，
+
+一个<string, object>键-值对的集合。这里的对象的属性实际上都是离散的，并不像其他的语言那样绑定到一个对象上面。this关键字
+
+指代的是属性或者函数 的调用者，也就是说，谁调用这个属性或者函数指的就是谁。可以看到，这里的this和Java或者C++的this是有
+
+所不同的，后者的this是指属性 或者函数所在的那个对象本身。而这里this的作用就是将它后面跟着的属性或者对象绑定到调用者上面。回忆一下JavaScript的new的过程，首先 将创建一个空的对象，然后使用构造函数初始化这个对象，最后返回这个对象。在这个过程中，JavaScript将把this用这个对象替换，也就是把对象 和这些属性或函数相关联，看上去就像是这个调用者拥有这个属性或者函数似的，其实这是this的作用。
+
+这样看来，show里面的name和age并没有关键字，但也是可以正常的执行就会明白怎么回事了——因为前面已经用this把name和age与这个
+
+对象bill相关联，并且，show也关联到这个bill变量，因此JavaScript是可以找到这两个变量的。
+
+这样来看，似乎由this修饰的都是公有变量。事实确实如此，如果你要使一个变量成为公有变量，可以使用this。像上面代码中的name
+
+和age都是公有变量，在外面使用aPerson.name或者aPerson.age就可以访问到。
+
+2. 私有变量
+
+怎么声明一个私有变量呢？事实上就像前面说的，JavaScript根本没有私有作用域这一说。那么来看下面的代码：
+
+Js代码
+
+    function Person(name, age) {  
+        var name = name; // 私有属性  
+       var age = age;  
+        var show = function() { // 私有函数  
+            alert("name: " + name + "; age: " + age);  
+        }  
+    }  
+    var bill = new Person("Bill", 20);  
+    alert(bill.name); // undefined  
+    bill.show(); // error, 不存在  
+
+这段代码和前面几乎是相同的，只是把属性前面的this换成了var。我们知道，var是用来声明变量的。show函数和bill.name都是未定义
+
+！这是怎么回事呢？
+
+回忆一下前面说过的JavaScript的new的过程。由于name和 age都是使用var声明的，JavaScript会将它看作是一个普通的变量，这样在
+
+构造初始化结束之后，构造函数就返回了，变量因超出作用域而访问不 到。也就是说，我们使用JavaScript变量作用域模拟了私有属性。
+
+3. 静态变量
+
+静态变量是绑定到类上面的。对于不同的对象来说，它们共享一个静态变量。
+
+Js代码
+
+    Person.num = 0; // 静态属性  
+    function Person() {  
+        this.show = function() {  
+            alert("num: " + Person.num);  
+        };  
+        Person.num++;  
+    }  
+    var bill = new Person();  
+    bill.show(); // 1  
+    var tom = new Person();  
+    tom.show(); // 2  
+    bill.show(); // 2  
+
+JavaScript中可以很方便的添加静态属性，因为JavaScript的对象就是散列，所以只要简单的在类名后添加一个属性或者函数即可。
+
+4. 访问私有变量和公有变量
+
+当对私有变量进行访问时，只需要使用变量的名字就可以了，但是，如果要访问公有变量，则需要使用this关键字。
+
+Js代码
+
+    function Person(name, age) {  
+        this.myName = name;  
+        var myAge = age;  
+        this.show = function() {  
+            alert("show = name: " + this.myName + "; age: " + myAge);  
+        }  
+        var showAll = function() {  
+            alert("showAll = name: " + this.myName + "; age: " + myAge);  
+        }  
+    }  
+    var bill = new Person("Bill", 20);  
+    bill.show();  
+
+
+在这里，如果去掉myName的this关键字，就会有未定义属性的错误.

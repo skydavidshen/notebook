@@ -36,10 +36,10 @@ person2.sayHi();
 =================================== example 2 ===================================
 
 function Shape(){
-this.init = function(param1,param2){
- this.param1 = param1;
- this.param2 = param2;
-}
+	this.init = function(param1,param2){
+	 this.param1 = param1;
+	 this.param2 = param2;
+	}
 }
 
 Shape.prototype = {
@@ -54,19 +54,20 @@ shape.method2();
 
 // 在js中并无继承机制，但可以通过将prototype中保存的变量逐一复制也可实现类似java语言中的继承，如下所示：
 Object.extend = function(destination, source) {
-      for (var property in source)
+      for (var property in source){
         destination[property] = source[property];
+      }  
       return destination;
 };
 
-   function Square(){
-          /*code here */
-   }
+function Square(){
+   /*code here */
+}
    
- Square.prototype = Object.extend(new Shape(),{method3:function(){alert('square')}});
+Square.prototype = Object.extend(new Shape(),{method3:function(){alert('square')}});
 
- var square = new Square();
- square.init('square method1','square method2');
+var square = new Square();
+square.init('square method1','square method2');
 square.method1();
 square.method2();
 square.method3();

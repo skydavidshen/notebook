@@ -1,11 +1,20 @@
 =================================== example 1 ===================================
 
+/*封装主要用意在于将实现细节隐藏，提供给客户端的只是定义良好的接口，在js中的封装同其它语言中的封装并无差异，
+最为简单的封装就是通过function 函数初始化类。*/
+
 function CreatePerson(name,sex,birthday)  
 {  
   this.name = name;
   this.sex = sex;
   this.birthday = birthday;
+  
+  this.showMe = function(){
+	  alert("my name is "+this.name+" \n sex is :"+this.sex+"\n birthday is:"+this.birthday);
+  }
 }  
+
+//js中函数本身就是类，我们可以通过Shape函数的prototype属性为该类添加方法,如下所示
 
 CreatePerson.prototype ={
 	sayHi:function(){
@@ -19,7 +28,8 @@ CreatePerson.prototype ={
 //那么我们多创建几个人的话，就可以  
 var person1 = new CreatePerson('zs','boy','2001-02-03');  
 var person2 = new CreatePerson('ls','boy','2001-02-04');  
-person1.sayHi();
+person1.showMe();
+
 person1.walk();
 person2.sayHi(); 
 

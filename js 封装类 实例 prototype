@@ -73,3 +73,18 @@ square.init('square method1','square method2');
 square.method1();
 square.method2();
 square.method3();
+
+
+=================================== example 3 ===================================
+
+function DemoA() {
+this.name = "DemoA";
+}
+function DemoB() { }
+
+//子类.prototype = new 父类;//注意：父类后不能传参数
+DemoB.prototype = new DemoA(); //DemoB继承了DemoA
+var b = new DemoB();
+alert(b.name);
+
+=================================== example 4 ===================================

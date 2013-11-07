@@ -109,6 +109,20 @@ function D(name,sex){
 	C.call(this,name,sex);
 } 
 
+/*
+
+call([thisObj[,arg1[, arg2[, [,.argN]]]]])
+
+参数:
+thisObj 可选项。将被用作当前对象的对象。
+arg1, arg2, , argN 可选项。将被传递方法参数序列。
+
+说明: call 方法可以用来代替另一个对象调用一个方法。call 方法可将一个函数的对象上下文从初始的上下文改变为由 thisObj 指
+定的新对象。
+
+eg: C.call(this,name,sex,age,job);
+*/
+
 D.prototype = new C();
 
 D.prototype.play = function(){

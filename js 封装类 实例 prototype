@@ -1,3 +1,8 @@
+
+study link : http://gengshu.net/2012/02/05/javascript_oop/
+
+
+
 =================================== example 1 ===================================
 
 /*封装主要用意在于将实现细节隐藏，提供给客户端的只是定义良好的接口，在js中的封装同其它语言中的封装并无差异，
@@ -86,7 +91,7 @@ DemoB.prototype = new DemoA(); //DemoB继承了DemoA
 var b = new DemoB();
 alert(b.name);
 
-=================================== example 4  the end ===================================
+=================================== example 4  the better ===================================
 
 function C(name,sex){
 	this.name = name;
@@ -148,3 +153,286 @@ var d = new D("dog","man");
 d.look();
 d.showMe();
 d.play();
+
+=================================== example 5  进化 ===================================
+
+var Class={
+ create:function(){
+     return function(){
+         this.inital.apply(this,arguments);
+     };
+ }
+};
+/*定义User类*/
+var User=Class.create();
+win[´OOP´][´User´]=User;
+User.prototype={
+ inital:function(userid,uname,uage,uscore){
+     this._userid=userid;
+     this._name=uname;
+     this._age=uage;
+     this._score=uscore;
+ },
+ downloadResource:function(){
+     return "User类：下载资源";
+ },
+ shareResource:function(){
+     this._score+=5;
+     return "User类：分享资源";
+ },
+ showInfo:function(){
+         var str_tmp="";
+         str_tmp+="userid:"+this._userid+"<br/>";
+         str_tmp+="name:"+this._name+"<br/>";
+         str_tmp+="age:"+this._age+"<br/>";
+         str_tmp+="score:"+this._score+"<br/>";
+         return str_tmp;
+ }
+};
+
+关键代码在于：this.inital.apply(this,arguments);这样一行，Class本身是一个对象，他有一个方法叫做create，此方法返回一个函数
+
+指针，其中函数体内执行this.inital.apply(this,arguments);this指向是的是当前对象，在这里就是User，apply方法是更改initial方
+
+法的作用域，arguments是参数列表。也许有人还是迷迷糊糊的，那暂且先记住当new一个对象的时候，initial方法就会执行。类已经定义
+
+好了，我们可以像java、c#一样去实例化对象。
+
+
+
+=================================== example 6  传统普通 封装 继承 多态 ===================================
+
+/*
+* OOP javascript demo
+* namespace OOP
+* developing tools UltraEdit
+* author 李检全
+* email lijianquan07@gmail.com
+* qq 55643287
+* date 2012-02-05
+*/
+(function(win){
+	if(!win[´OOP´])
+		win[´OOP´]={};
+
+	//申明User类，其中users为一个数组，数组中的数据是单个user的信息
+	function User(userid,uname,uage,uscore){
+		this._userid=userid;
+		this._name=uname;
+		this._age=uage;
+		this._score=uscore;
+	}
+	/*对User类添加引用*/
+	win[´OOP´][´User´]=User;
+	//添加public 方法
+	/*用户下载资源*/
+	User.prototype.downloadResource=function(){
+		return "User类：下载资源";
+	};
+	//添加public 方法
+	/*分享资源（abstract或者virtual方法）*/
+	User.prototype.shareResource=function(user){
+		this._score+=5;
+		return "User类：分享资源";
+	};
+	//添加public方法
+	/*显示用户信息（abstract或者virtual方法）*/
+	User.prototype.showInfo=function(){
+		var str_tmp="";
+		str_tmp+="userid:"+this._userid+"<br/>";
+		str_tmp+="name:"+this._name+"<br/>";
+		str_tmp+="age:"+this._age+"<br/>";
+		str_tmp+="score:"+this._score+"<br/>";
+		return str_tmp;
+	};
+	//定义会员类
+	function Member(userid,uname,uage,uscore,offlineSpace,level){
+		this._offlineSpace=offlineSpace;
+		this._level=level;
+		/*初始化基类参数*/
+		User.call(this,userid,uname,uage,uscore);
+	}
+	win[´OOP´][´Member´]=Member;
+	/*更改Member的prototype属性，以实现继承*/
+	Member.prototype=new User();
+	//添加public 方法
+	//会员类有权限使用云点播
+	Member.prototype.cloudPlay=function(){
+		return "Member类：云点播";
+	};
+	//添加public 方法
+	//会员类有权限使用离线下载
+	Member.prototype.offlineDownload=function(){
+		return "Member类：离线下载";
+	};
+	//相当于override abstract(或virtual)方法
+	/*重写基类分享资源方法，假设计算积分方式不一样*/
+	Member.prototype.shareResource=function(){
+		this._score+=10;
+		return "Member类：分享资源";
+	};
+	//相当于override abstract(或virtual)方法
+	/*重写显示用户信息方法*/
+	Member.prototype.showInfo=function(){
+		var str_tmp="";
+		str_tmp+="userid:"+this._userid+"<br/>";
+		str_tmp+="name:"+this._name+"<br/>";
+		str_tmp+="age:"+this._age+"<br/>";
+		str_tmp+="score:"+this._score+"<br/>";
+		str_tmp+="offline Space:"+this._offlineSpace+"<br/>";
+		str_tmp+="level:"+this._level+"<br/>";
+		return str_tmp;
+	};
+	/*使用场景函数*/
+	function main(){
+	  var user=new User(´10000´,´david´,24,1000);
+		var arr_tmp=new Array();
+		arr_tmp.push("clas User");
+		arr_tmp.push("===================================================");
+		arr_tmp.push(user.showInfo());
+		arr_tmp.push(user.downloadResource());
+		arr_tmp.push(user.shareResource());
+		arr_tmp.push("===================================================<br/><br/>");
+
+		var member=new Member(´10001´,´beckham´,24,9000,"100Gb","十级");
+		arr_tmp.push("class Member");
+		arr_tmp.push("===================================================");
+		arr_tmp.push(member.showInfo());
+		arr_tmp.push(member.downloadResource());
+		arr_tmp.push(member.cloudPlay());
+		arr_tmp.push(member.offlineDownload());
+		arr_tmp.push(member.shareResource());
+		arr_tmp.push("===================================================");
+		var tar_obj=document.getElementById("wrap");
+		tar_obj.innerHTML=arr_tmp.join(´<br/>´);
+	}
+	win[´OOP´][´main´]=main;
+	//执行结果
+	window.onload=function(){
+		main();
+	};
+
+})(window);
+
+
+=================================== example 7  优雅方式（可以慢慢研究） 封装 继承 多态 ===================================
+
+/*
+* OOP javascript demo
+* namespace OOP
+* developing tools UltraEdit
+* author 李检全
+* email lijianquan07@gmail.com
+* qq 55643287
+* date 2012-02-05
+*/
+/*
+============================================================
+	注释请看OOP1.src.js，注释就不重写了。
+============================================================
+*/
+(function(win){
+	if(!win[´OOP´])
+		win[´OOP´]={};
+	var Class={
+		create:function(){
+			return function(){
+				this.inital.apply(this,arguments);
+			};
+		}
+	};
+	/*定义User类*/
+	var User=Class.create();
+	win[´OOP´][´User´]=User;
+	User.prototype={
+		inital:function(userid,uname,uage,uscore){
+			this._userid=userid;
+			this._name=uname;
+			this._age=uage;
+			this._score=uscore;
+		},
+		downloadResource:function(){
+			return "User类：下载资源";
+		},
+		shareResource:function(){
+			this._score+=5;
+			return "User类：分享资源";
+		},
+		showInfo:function(){
+				var str_tmp="";
+				str_tmp+="userid:"+this._userid+"<br/>";
+				str_tmp+="name:"+this._name+"<br/>";
+				str_tmp+="age:"+this._age+"<br/>";
+				str_tmp+="score:"+this._score+"<br/>";
+				return str_tmp;
+		}
+	};
+	/*定义Member类*/
+	var Member=Class.create();
+	win[´OOP´][´Member´]=Member;
+	var repeater=new User();
+	Object.prototype.extend=function(obj){
+		for(var item in obj){
+			this[item]=obj[item];
+		}
+	};
+	var fn={
+		inital:function(userid,uname,uage,uscore,offlineSpace,level){
+					this._offlineSpace=offlineSpace;
+					this._level=level;
+					/*初始化基类参数*/
+					User.prototype.inital.call(this,userid,uname,uage,uscore);
+		},
+		cloudPlay:function(){
+			return "Member类：云点播";
+		},
+		offlineDownload:function(){
+			return "Member类：离线下载";
+		},
+		shareResource:function(){
+			this._score+=10;
+			return "Member类：分享资源";
+		},
+		showInfo:function(){
+			var str_tmp="";
+			str_tmp+="userid:"+this._userid+"<br/>";
+			str_tmp+="name:"+this._name+"<br/>";
+			str_tmp+="age:"+this._age+"<br/>";
+			str_tmp+="score:"+this._score+"<br/>";
+			str_tmp+="offline Space:"+this._offlineSpace+"<br/>";
+			str_tmp+="level:"+this._level+"<br/>";
+			return str_tmp;
+		}
+	};
+	repeater.extend(fn);
+	Member.prototype=repeater;
+	function main(){
+	  var user=new User(´10000´,´david´,24,1000);
+		var arr_tmp=new Array();
+		arr_tmp.push("clas User");
+		arr_tmp.push("===================================================");
+		arr_tmp.push(user.showInfo());
+		arr_tmp.push(user.downloadResource());
+		arr_tmp.push(user.shareResource());
+		arr_tmp.push("===================================================<br/><br/>");
+
+		var member=new Member(´10001´,´beckham´,24,9000,"100Gb","十级");
+		arr_tmp.push("class Member");
+		arr_tmp.push("===================================================");
+		arr_tmp.push(member.showInfo());
+		arr_tmp.push(member.downloadResource());
+		arr_tmp.push(member.cloudPlay());
+		arr_tmp.push(member.offlineDownload());
+		arr_tmp.push(member.shareResource());
+		arr_tmp.push("===================================================");
+		var tar_obj=document.getElementById("wrap");
+		tar_obj.innerHTML=arr_tmp.join(´<br/>´);
+	}
+	win[´OOP´][´main´]=main;
+	//执行结果
+	window.onload=function(){
+		main();
+	};
+
+})(window);
+

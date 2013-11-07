@@ -74,11 +74,10 @@ square.method1();
 square.method2();
 square.method3();
 
-
 =================================== example 3 ===================================
 
 function DemoA() {
-this.name = "DemoA";
+  this.name = "DemoA";
 }
 function DemoB() { }
 
@@ -87,4 +86,45 @@ DemoB.prototype = new DemoA(); //DemoB继承了DemoA
 var b = new DemoB();
 alert(b.name);
 
-=================================== example 4 ===================================
+=================================== example 4  the end ===================================
+
+function C(name,sex){
+	this.name = name;
+	this.sex = sex;
+	this.showMe = function(){
+		alert("my name is : "+this.name+" and my sex is : "+this.sex);
+	}
+}
+
+C.prototype = {
+	look:function(){
+		alert(this.name+" is looking tv");
+	},
+	play:function(){
+		alert(this.name+" is playing");
+	}
+};
+
+function D(name,sex){
+	C.call(this,name,sex);
+} 
+
+D.prototype = new C();
+
+D.prototype.play = function(){
+	alert(this.name + " is play game");
+}
+
+/*
+// 下面这种写法 会覆盖掉之前 从C类中继承的方法属性  因为  D.prototype = { code } 这个相当于重新赋值方法了
+D.prototype = {
+	play:function(){
+		alert(this.name + " is play game");
+	}	
+}
+*/
+
+var d = new D("dog","man");
+d.look();
+d.showMe();
+d.play();

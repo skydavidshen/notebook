@@ -1,0 +1,156 @@
+1. 简介：
+
+         封装是面向对象设计的基石，封装是什么，封装有何用，这些常识性的问题在这里不做介绍。尽管JS是一种面向对象的语言，
+         但是它不具备用以将成员声明为公用或私用的任何内置机制。与上篇讲述的接口一样，我们将自己想办法实现这种特性。这
+         里主要利用了JS的闭包。什么是闭包，这里也不作讨论，这不是一个讨论JS语法的总结。
+
+
+       2.JS创建自定义对象的基本方法
+
+      通过JS创建自定义对象主要有两种方法，一种是通过字面量对象，这种方法等价于实例化一个Object对象，给实例化的对象添加
+      各种属性和方法； 第二种是通过构造函数的形式实例化对象。以下代码展示了这两种创建对象的方法。
+
+[javascript] view plaincopy
+
+    /*通过字面量创建对象，等价于var obj=new Object(); obj.name='xxx', obj.age=23, obj.getName=function(){return this.
+    
+    name;}*/
+    
+    var obj = {
+        name: 'xxx',
+        age: '23',
+        getName:function(){
+              return this.name; },
+       ..............
+    };
+      
+    /*通过构造函数实例化一个对象*/
+    function Person(name, age){
+         this.name = name;
+         this.age = age;
+         this.getName=function(){
+                  return this.name;
+         };
+    }
+      
+    var obj_person = new Person('xxx', 23);
+
+
+通过字面量创建对象常用于保存一些数据，或者实现一个简单的单例对象，我们可以看到，无法从这种创建对象的方法隐藏任何信息。
+
+通过构造函数实例化对象，很显然，非常符合面向对象的特点，且我们可以通过该方法实现封装的特性。
+
+
+3. 利用闭包和构造函数实现私有成员和特权方法
+
+       假设你想定义一个Person类，这个Person包含有name, age这两个属性，同时对age字段还提供了对应的get和set操作，而name字
+       段我们不希望有人去更改他，只提供get方法，同时为了规范， 每个私有成员的命名都应该以'_'开头，很自然的，你可以这样
+       定义构造函数：
+
+[javascript] view plaincopy
+
+    function Person(name, age){
+         this._name = name;
+         this._age = age;
+         this.getAge = function(){
+              return this.age;
+         };
+         this.setAge = function(value){
+             if(value < 0){
+                 throw new Error("Age of a Person cannot be a minus"); //人的年龄是不能为负数的，在这里做个简单的值检验
+                 
+             }
+             this.age = value;
+         };
+         this.getName = function(){
+             return this.name
+         };
+
+
+事实上，这样只能从命名规范上来约束使用你的代码的程序员，如果用你的代码的程序员想更改这些目前所谓的私有成员，是非常容易
+
+的：
+
+只需 var obj = new Person(); obj._age = -10; 为了解决这类问题，我们可以按如下代码所示使用闭包实现私有成员：
+
+[javascript] view plaincopy
+
+    function Person(name, age){
+        if (age < 0) {
+            throw new Error("Age of a Person cannot be a minus");
+        }
+          
+        //私有成员,仅内部可见,只能通过特权方法访问
+        var _name = name,
+            _age = age;
+          
+        //get和set特权方法
+        this.getName = function(){
+            return _name;
+        };
+          
+        this.getAge = function(){
+            return _age;
+        };
+        this.setAge = function(value){
+            if (value < 0) {
+                throw new Error("Age of a Person cannot be a minus");
+            }
+            _age = value;
+        };
+    }
+
+
+      4. 用闭包实现私有成员的弊端
+      从上面的闭包代码可以看到，内部访问私用成员的方法在每一个对象中都必须存在一份副本，即使他们实现的功能和代码是一样的
+      ，在普通的模式中，通过原型链可以只保存一份通用的方法，即可以这样定义类的get和set： Person.prototype.getName = 
+      function(){ return this.name; }; 因此通过闭包的形式实现的特权方法会造成更多的内存消耗，在开发团队中，一般通过命名
+      规范的模式应该就可以保证私有成员的完整性。
+   
+    5. 静态方法和属性
+    现在，假设我们的客户提出了一个新的需求，需要一个方法能统计人数，自然的这个人数就是Person实例化后的对象个数，同样我们
+    很自然的想到可以通过一个静态变量来统计，再一次的，我们也不想别人可以任意的修改这个数值，因此我们同样通过闭包来实现私
+    有的静态属性，并提供一个公共的静态方法让用户可以获得人数。同时，我们进一步细化原来的代码，把验证年龄合法性的代码封装
+    成一个静态私有函数。 以下代码展示了上面所述的实现：
+
+[javascript] view plaincopy
+
+    //这里使用了一个自运行函数实现闭包
+    var Person = (function(){
+        var personNumbers = 0; //静态私有成员，记录实例化个数
+        function _checkAge(value){ //静态私有方法，检验年龄的合法性
+            if (value < 0) {
+                throw new Error("Age of a Person cannot be a minus");
+            }
+        }
+          
+        var cstor = function(name, age){ //将返回的构造函数
+            _checkAge(age);
+            //私有成员,仅内部可见,只能通过特权方法访问
+            var _name = name,
+                _age = age;
+                  
+            ++personNumbers;//增加实例化个数
+            //get和set特权方法
+            this.getName = function(){
+                return _name;
+            };
+          
+            this.getAge = function(){
+                 return _age;
+            };
+            this.setAge = function(value){
+                _checkAge(age);
+                _age = value;
+            };
+        };
+          
+        cstor.getPersonNumbers = function(){ //静态公有方法，返回实例化个数
+            return personNumbers;
+        };
+          
+        return cstor;
+    })();
+
+
+上面的代码，我们使用了一个自运行函数实现了闭包，并实现了静态成员和静态方法， 对于静态私有成员来说，由于是相对于类（或者说构造函数）存在的，所以不会应为实例化对象的增加而增加，仅会保存一份。 所以静态私有成员无需担心内存的消耗。 

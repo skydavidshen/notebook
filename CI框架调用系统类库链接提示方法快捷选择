@@ -54,6 +54,7 @@ link : http://codeigniter.org.cn/forums/thread-15749-1-1.html
 * @property CI_Config            $config
 * @property CI_Input             $input
 * @property CI_Cache             $cache
+* @property CI_DB_active_record  $db
 * @package                CodeIgniter
 * @subpackage        Libraries
 * @category        Libraries

@@ -58,3 +58,68 @@ Array
 [certainty] => 78 //不清楚其含义；
 )
 */
+
+
+example : 
+
+<?php
+/**
+ * ip location
+ * @author Alan shen
+ *
+ */
+class IpLocation{
+	private $ip = "127.0.0.1";
+	private $curlLink = "http://www.geobytes.com/IpLocator.htm?GetLocation&template=php3.txt&IpAddress=";
+	private $chinaShortName = "CN";
+	
+	public function __construct(){
+		$this->ip = $this->clientIp();
+	}
+	
+	/**
+	 * 获取客户端IP地址
+	 * */
+	private function clientIp(){
+		if(getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown')) {
+			$onlineip = getenv('HTTP_CLIENT_IP');
+		} elseif(getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), 'unknown')) {
+			$onlineip = getenv('HTTP_X_FORWARDED_FOR');
+		} elseif(getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), 'unknown')) {
+			$onlineip = getenv('REMOTE_ADDR');
+		} elseif(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown')) {
+			$onlineip = $_SERVER['REMOTE_ADDR'];
+		}
+		preg_match("/[\d\.]{7,15}/", $onlineip, $onlineipmatches);
+		$onlineip = $onlineipmatches[0] ? $onlineipmatches[0] : 'unknown';
+		unset($onlineipmatches);
+		return $onlineip;
+	}
+	
+	/**
+	 * get country detail return list
+	 * @return Array ( [known] => true [locationcode] => HKHKHKON [fips104] => HK [iso2] => HK [iso3] => HKG [ison] => 344 [internet] => HK [countryid] => 109 [country] => Hong Kong (SAR) [regionid] => 646 [region] => Hong Kong (SAR) [regioncode] => HK [adm1code] => [cityid] => 14938 [city] => Hong Kong [latitude] => 22.2830 [longitude] => 114.1500 [timezone] => +08:00 [certainty] => 99 [mapbytesremaining] => Free ) 
+	 */
+	private function getCountryDetail(){
+		if (empty($this->ip)) {
+			return array();
+		}
+		$geoInfo = get_meta_tags($this->curlLink.$this->ip);
+		return $geoInfo;
+	}
+	
+	public function getCountryShortName(){
+		if ($this->ip=="127.0.0.1") {
+			return $this->chinaShortName;
+		}
+		
+		$countryDetail =$this->getCountryDetail();
+		if (empty($countryDetail) || $countryDetail["known"]==false) {
+			return "";
+		} 
+		return $countryDetail["iso2"];
+	}
+}
+
+
+

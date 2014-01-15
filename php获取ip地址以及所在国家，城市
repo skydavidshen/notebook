@@ -1,0 +1,60 @@
+使用腾迅的api接口，php获取ip地址以及所在城市
+
+返回类似：var IPData = new Array(“61.51.71.183″,”",”北京市”,”");
+
+<?php
+
+function get_ip_place(){
+
+$ip=file_get_contents("http://fw.qq.com/ipaddress");
+
+$ip=str_replace('"',' ',$ip);
+
+$ip2=explode("(",$ip);
+
+$a=substr($ip2[1],0,-2);
+
+$b=explode(",",$a);
+
+return $b;
+
+}
+
+$ip=get_ip_place();
+
+print_r($ip);
+
+?>
+
+ 即Array ( [0] => 61.164.140.51 [1] => [2] => 浙江省 [3] => 温州市 )
+这样大家就可以很方便的通过数组索引来调用ip地址和所在的省市了。
+希望对大家有用。
+补充一点：在网上找到另外一种方法：
+代码如下：
+$ip = $_SERVER['REMOTE_ADDR'];//这里的ip可以是你自定义的ip
+$geoInfo = get_meta_tags(http://www.geobytes.com/IpLocator.htm?GetLocation&template=php3.txt&IpAddress=$ip);
+/*
+返回的数组信息如下，不过是英文版本的
+Array
+(
+[known] => true //该IP地址是否可知，即是否有收录；
+[locationcode] => CNGDGUAN //地址位置的代码，包含了国家、省份和城市；
+[fips104] => CH //美国联邦信息处理标准的国家代码；
+[iso2] => CN //iso2标准的国家代码；
+[iso3] => CHN //iso标准的国家代码；
+[ison] => 156 //用途未明
+[internet] => CN //也是国家代码
+[countryid] => 49 //国家ID；
+[country] => China //国家名称；
+[regionid] => 1361 //地区的id，即省份；
+[region] => Guangdong //地区名称，即省份名称；
+[regioncode] => GD //地区的代码或者缩写；
+[adm1code] => CH30 //不清楚其含义；
+[cityid] => 3539 //城市的ID；
+[city] => Guangzhou //城市的名称；
+[latitude] => 23.1170 //纬度；
+[longitude] => 113.2500 //经度；
+[timezone] => +08:00 //时区；
+[certainty] => 78 //不清楚其含义；
+)
+*/

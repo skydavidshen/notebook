@@ -1,3 +1,6 @@
+实用方法：http://justcoding.iteye.com/blog/986355
+
+
 使用腾迅的api接口，php获取ip地址以及所在城市
 
 返回类似：var IPData = new Array(“61.51.71.183″,”",”北京市”,”");
